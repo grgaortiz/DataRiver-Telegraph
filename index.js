@@ -8,11 +8,12 @@
  */
 
 /**
- * Dependices
+ * Dependencies
  */
-var sendgrid = require('sendgrid')('grgortiz', '3ataRiver!');
+var fs = require('fs');
 var csv = require('csv');
 var async = require('async');
+var sendgrid = require('sendgrid')('grgortiz', '3ataRiver!');
 
 /**
  * Params
@@ -23,37 +24,45 @@ var n = 0;
 /**
  * Telegraph
  */
-var file = fs.readFileSync('/Users/gortiz/PhpstormProjects/HospitalDirectory/emailTest.csv');
+var file = fs.readFileSync('emailTest.csv');
 csv.parse(file, {delimiter: ','}, function (err, data) {
-    for (var key in data) {
-        if (data.hasOwnProperty(key)) {
-            var h = data[key];
-            if (h[0] != '') {
-                asyncFunctions.push(function (callback) {
-                    // SendGrid
-                    sendgrid.send({
-                        to: '' + h[0] + '',
-                        from: 'grgaortiz@test.com',
-                        subject: 'NodeTest',
-                        text: 'My first email through SendGrid.'
-                    }, function (err, json) {
-                        if (err) {
-                            return console.error(err);
-                            callback();
-                        } else {
-                            n++;
-                            callback();
-                        }
+    if(err) {
+        return console.log(err);
+    } else {
+        for (var key in data) {
+            if (data.hasOwnProperty(key)) {
+                var h = data[key];
+                if (h[0] != '') {
+                    asyncFunctions.push(function (callback) {
+                        // SendGrid
+                        sendgrid.send({
+                            to: '' + h[0] + '',
+                            from: 'grgaortiz@test.com',
+                            subject: 'NodeTest',
+                            text: 'My first email through SendGrid.'
+                        }, function (err, json) {
+                            if (err) {
+                                console.error(err);
+                                callback();
+                            } else {
+                                n++;
+                                callback();
+                            }
+                        });
                     });
-                });
+                }
             }
         }
-    }
 
-    async.parallel(
-        asyncFunctions,
-        function (err, results) {
-            console.log('Processed ' + n + ' telegraph events.');
-        }
-    );
+        async.parallel(
+            asyncFunctions,
+            function (err, results) {
+                if (err) {
+                    return console.error(err);
+                } else {
+                    console.log('Processed ' + n + ' telegraph events.');
+                }
+            }
+        );
+    }
 });
