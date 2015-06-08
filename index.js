@@ -30,7 +30,7 @@ var i = 0;
  */
 var file = fs.readFileSync('/Users/gortiz/mean/DataRiver-Telegraph/emailTest.csv');
 csv.parse(file, function (err, data) {
-    if(err) {
+    if (err) {
         return console.log(err);
     } else {
         for (var key in data) {
@@ -45,9 +45,9 @@ csv.parse(file, function (err, data) {
                 // SendGrid
                 sendgrid.send({
                     to: '' + email + '',
-                    from: 'grgaortiz@test.com',
-                    subject: 'NodeTest',
-                    text: 'My first email through SendGrid.'
+                    from: '' + config.emailFrom + '',
+                    subject: '' + config.emailSubject + '',
+                    text: '' + config.emailText + ''
                 }, function (err, json) {
                     if (err) {
                         console.error(err);
