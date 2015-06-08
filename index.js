@@ -13,7 +13,8 @@
 var fs = require('fs');
 var csv = require('csv');
 var async = require('async');
-var sendgrid = require('sendgrid')('grgortiz', '3ataRiver!');
+var config = require('./config');
+var sendgrid = require('sendgrid')(config.SendGridUser, config.SendGridPass);
 
 /**
  * Params
