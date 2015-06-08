@@ -46,6 +46,7 @@ csv.parse(file, function (err, data) {
                 sendgrid.send({
                     to: '' + email + '',
                     from: '' + config.emailFrom + '',
+                    fromname: '' + config.emailFromName + '',
                     subject: '' + config.emailSubject + '',
                     text: '' + config.emailText + ''
                 }, function (err, json) {
