@@ -1,7 +1,11 @@
 {
   "name": "datariver-telegraph",
   "version": "0.0.1",
-  "dependencies": {},
+  "dependencies": {
+    "async": "^1.2.1",
+    "csv": "^0.4.2",
+    "sendgrid": "^1.8.0"
+  },
   "engines": {
     "node": "0.8.x",
     "npm": "2.2.x"
