@@ -23,7 +23,7 @@ var n = 0;
 /**
  * Telegraph
  */
-fs.readFile('lists/hospital_emails_two.csv', 'utf8', function (error, data) {
+fs.readFile('lists/hospital_emails_one.csv', 'utf8', function (error, data) {
     csv.parse(data, function (err, data) {
         if (err) {
             return console.log(err);
