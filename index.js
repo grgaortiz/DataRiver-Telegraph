@@ -23,7 +23,7 @@ var n = 0;
 /**
  * Telegraph
  */
-var file = fs.readFileSync('hospitalEmails.csv');
+var file = fs.readFileSync('testEmails.csv');
 csv.parse(file, function (err, data) {
     if (err) {
         return console.log(err);
