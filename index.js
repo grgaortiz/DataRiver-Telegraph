@@ -41,15 +41,18 @@ csv.parse(file, function (err, data) {
                 }
             }
             asyncFunctions.push(function (callback) {
-                var email = emails[i];
+                var emailAddress = emails[i];
                 // SendGrid
-                sendgrid.send({
-                    to: '' + email + '',
+                var email = new sendgrid.Email({
+                    to: '' + emailAddress + '',
                     from: '' + config.emailFrom + '',
                     fromname: '' + config.emailFromName + '',
                     subject: '' + config.emailSubject + '',
                     text: '' + config.emailText + ''
-                }, function (err, json) {
+                });
+                email.addCategory('SLA Webinar');
+                email.addCategory('Telegraph');
+                sendgrid.send(email, function (err, json) {
                     if (err) {
                         console.error(err);
                         callback();
