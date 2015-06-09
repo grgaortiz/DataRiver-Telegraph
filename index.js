@@ -28,7 +28,7 @@ var i = 0;
 /**
  * Telegraph
  */
-var file = fs.readFileSync('/Users/gortiz/mean/DataRiver-Telegraph/emailTest.csv');
+var file = fs.readFileSync('hospitalEmails.csv');
 csv.parse(file, function (err, data) {
     if (err) {
         return console.log(err);
@@ -58,6 +58,7 @@ csv.parse(file, function (err, data) {
                         callback();
                     } else {
                         n++;
+                        console.error(emailAddress, json, n);
                         callback();
                     }
                 });
