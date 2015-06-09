@@ -12,18 +12,13 @@
  */
 var fs = require('fs');
 var csv = require('csv');
-var async = require('async');
 var config = require('./config');
 var sendgrid = require('sendgrid')(config.SendGridUser, config.SendGridPass);
 
 /**
  * Params
  */
-var asyncFunctions = [];
-var emails = [];
 var n = 0;
-var i = 0;
-
 
 /**
  * Telegraph
@@ -37,44 +32,27 @@ csv.parse(file, function (err, data) {
             var row = data[key];
             if (data.hasOwnProperty(key)) {
                 if (row[0] != '') {
-                    emails.push(row[0]);
+                    // SendGrid
+                    var email = new sendgrid.Email({
+                        to: '' + row[0] + '',
+                        from: '' + config.emailFrom + '',
+                        fromname: '' + config.emailFromName + '',
+                        subject: '' + config.emailSubject + '',
+                        text: '' + config.emailText + ''
+                    });
+                    email.addCategory('SLA Webinar');
+                    email.addCategory('Telegraph');
+                    sendgrid.send(email, function (err, json) {
+                        if (err) {
+                            console.error(err);
+                        } else {
+                            n++;
+                            console.error(row[0], json, n);
+                        }
+                    });
                 }
             }
-            asyncFunctions.push(function (callback) {
-                var emailAddress = emails[i];
-                // SendGrid
-                var email = new sendgrid.Email({
-                    to: '' + emailAddress + '',
-                    from: '' + config.emailFrom + '',
-                    fromname: '' + config.emailFromName + '',
-                    subject: '' + config.emailSubject + '',
-                    text: '' + config.emailText + ''
-                });
-                email.addCategory('SLA Webinar');
-                email.addCategory('Telegraph');
-                sendgrid.send(email, function (err, json) {
-                    if (err) {
-                        console.error(err);
-                        callback();
-                    } else {
-                        n++;
-                        console.error(emailAddress, json, n);
-                        callback();
-                    }
-                });
-                i++;
-            });
         }
 
-        async.parallel(
-            asyncFunctions,
-            function (err, results) {
-                if (err) {
-                    return console.error(err);
-                } else {
-                    console.log('Processed ' + n + ' telegraph events.');
-                }
-            }
-        );
     }
 });
