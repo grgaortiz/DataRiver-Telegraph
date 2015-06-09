@@ -23,36 +23,37 @@ var n = 0;
 /**
  * Telegraph
  */
-var file = fs.readFileSync('testEmails.csv', 'utf8');
-csv.parse(file, function (err, data) {
-    if (err) {
-        return console.log(err);
-    } else {
-        for (var key in data) {
-            var row = data[key];
-            if (data.hasOwnProperty(key)) {
-                if (row[0] != '') {
-                    // SendGrid
-                    var email = new sendgrid.Email({
-                        to: '' + row[0] + '',
-                        from: '' + config.emailFrom + '',
-                        fromname: '' + config.emailFromName + '',
-                        subject: '' + config.emailSubject + '',
-                        text: '' + config.emailText + ''
-                    });
-                    email.addCategory('SLA Webinar');
-                    email.addCategory('Telegraph');
-                    sendgrid.send(email, function (err, json) {
-                        if (err) {
-                            console.error(err);
-                        } else {
-                            n++;
-                            console.error(row[0], json, n);
-                        }
-                    });
+fs.readFile('testEmails.csv', 'utf8', function(error, data) {
+    csv.parse(data, function (err, data) {
+        if (err) {
+            return console.log(err);
+        } else {
+            for (var key in data) {
+                var row = data[key];
+                if (data.hasOwnProperty(key)) {
+                    if (row[0] != '') {
+                        // SendGrid
+                        var email = new sendgrid.Email({
+                            to: '' + row[0] + '',
+                            from: '' + config.emailFrom + '',
+                            fromname: '' + config.emailFromName + '',
+                            subject: '' + config.emailSubject + '',
+                            text: '' + config.emailText + ''
+                        });
+                        email.addCategory('SLA Webinar');
+                        email.addCategory('Telegraph');
+                        sendgrid.send(email, function (err, json) {
+                            if (err) {
+                                console.error(err);
+                            } else {
+                                n++;
+                                console.error(row[0], json, n);
+                            }
+                        });
+                    }
                 }
             }
-        }
 
-    }
+        }
+    });
 });
